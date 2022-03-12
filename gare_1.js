@@ -3,11 +3,14 @@ import { RefreshControl, Pressable, StatusBar, SafeAreaView, ActivityIndicator, 
 import { useRoute, useNavigation, NavigationContainer } from '@react-navigation/native';
 import { ProgressBar, Colors } from 'react-native-paper';
 
+import Error from './error'
+
 function Gare_1 ({ route, navigation }){
-  const { stop } = route.params;
+  const { stop, stopName } = route.params;
 
   return (  <Gare_Home
               stop = {stop}
+              stopName = {stopName}
             />
           );
 }
@@ -16,7 +19,7 @@ class Gare_Home extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-            train: '',
+            train: [],
             stop: this.props.stop,
 
             error: '',
@@ -30,16 +33,31 @@ class Gare_Home extends React.Component {
         let stop = this.state.stop;
         // let type = this.props.type;
         let type = 'departure';
-        let url = 'https://api.mylines.fr/sncf/' + type + '?stop=' + stop + '&count=10';
+        let url = 'https://api.mylines.fr/sncf/departure?stop=' + stop + '&count=10';
             
         fetch(url, {
             method: 'get'
         })
-        .then(res => res.json())
-        .then(data => {
-            this.setState({
-                train: data.trains
-            });
+        .then(reponse => reponse.text())
+        .then(reponse => {
+            alert(reponse)
+            let json = JSON.parse(reponse);
+
+            if (json.error && json.error == '200') {
+                this.setState({
+                    error: 'La gare indiqué ne semble pas exister.',
+                    error_message: 'Vérifier l\'url saisie ou réessayez dans quelques minutes.'
+                }); 
+            } else if (json.error) {
+                this.setState({
+                    error: 'Erreur : ' + json.error,
+                    error_message: json.error_message,
+                }); 
+            } else {
+                this.setState({
+                    train: json.trains
+                });
+            }
         })
         .catch((error) => {
             this.setState({
@@ -53,13 +71,31 @@ class Gare_Home extends React.Component {
         return(
             <ScrollView style={styles.container}>
                 {this.state.error != 0 || this.state.error != '' ?
-                    <Text>Something wrong - {this.state.error} - {this.state.error_message}</Text>
+                <>
+                    <Header
+                        stopName = {this.props.stopName}
+                    />
+                    <Error
+                        error = {this.state.error}
+                        error_message = {this.state.error_message}
+                    />
+                </>
+                        
                     :
                     <>
                         {this.state.train.length == 0 ?
-                            <ActivityIndicator size="large" color="#ffffff" style={styles.activity}/>
+                            <>
+                                <Header
+                                    stopName = {this.props.stopName}
+                                />
+                                <ActivityIndicator size="large" color="#ffffff" style={styles.activity}/>
+                            </>
+                            
                             :
                             <View className="mobile-global">
+                                <Header
+                                    stopName = {this.props.stopName}
+                                />
                                 {this.state.train.map((train, i) => (
                                     <Train 
                                         key = {i} 
@@ -154,9 +190,12 @@ class Train extends React.Component {
                         </View>
                     </View>
                     <View>
-                        <Text style={styles.time}>{(created_base_time.getHours() < 10) ? '0' + created_base_time.getHours() : created_base_time.getHours()}:{(created_base_time.getMinutes() < 10) ? '0' + created_base_time.getMinutes() : created_base_time.getMinutes()}</Text>
-                            <br />
-                        <Info real_time={real_time} base_time={base_time} status={status} message={message}/>
+                        <View>
+                            <Text style={styles.time}>{(created_base_time.getHours() < 10) ? '0' + created_base_time.getHours() : created_base_time.getHours()}:{(created_base_time.getMinutes() < 10) ? '0' + created_base_time.getMinutes() : created_base_time.getMinutes()}</Text>
+                        </View>
+                        <View>
+                            <Info real_time={real_time} base_time={base_time} status={status} message={message}/>
+                        </View>
                     </View>
                 </View>
                
@@ -175,16 +214,16 @@ class Info extends React.Component {
         let message = this.props.message;
 
         if (status == 'deleted')
-            return ( <span className="deleted"> supprimé </span> );
+            return ( <Text className="deleted"> supprimé </Text> );
 
         if (status == 'late')
-            return ( <span className="late"> retardé </span> );
+            return ( <Text className="late"> retardé </Text> );
 
         if (status == 'real_time')
-            return ( <span className="late"> temps réel </span> );
+            return ( <Text className="late"> temps réel </Text> );
         
         if (message == 'idf')
-            return ( <span className="info"> théorique </span> );
+            return ( <Text className="info"> théorique </Text> );
 
         real_time = createDate(real_time);
         base_time = createDate(base_time);
@@ -204,19 +243,19 @@ class Info extends React.Component {
         if (mm > 0){
             if (message == 'idf_realtime'){
                 if (hh == 0 && mm <= 5)
-                    return ( <span className="info"> + {mm} min </span> );
+                    return ( <Text> + {mm} min </Text> );
                 else if (hh == 0)
-                    return ( <span className="late"> + {mm} min </span> );
+                    return ( <Text className="late"> + {mm} min </span> );
                 else 
-                    return ( <span className="late"> + {hh}h{mm} </span> );
+                    return ( <Text className="late"> + {hh}h{mm} </span> );
             } else {
                 if (hh == 0)
-                    return ( <span className="late"> retard : {mm} min </span> );
+                    return ( <Text className="late"> retard : {mm} min </Text> );
                 else 
-                    return ( <span className="late"> retard : {hh}h{mm} </span> );
+                    return ( <Text className="late"> retard : {hh}h{mm} </Text> );
             }
         } else if (typeof this.props.displayAll !== 'undefined')
-            return ( <span className="info"> à l'heure </span> );
+            return ( <Text className="info"> à l'heure </Text> );
         else
             return ( <></> );
 	}   
@@ -224,6 +263,19 @@ class Info extends React.Component {
 function createDate(date){
     let el = new Date(date.substring(0, 4), date.substring(4, 6), date.substring(6, 8), date.substring(9, 11), date.substring(11, 13), 0, 0); 
     return el;
+}
+
+function Header ({stopName}) {
+    const navigation = useNavigation();
+    return(
+        <View style={styles.header}>
+            <Pressable onPress={() => navigation.goBack()} >
+                <Image style={{height: 30, width: 30, resizeMode: 'contain'}} source={require('./assets/img/back.png')}></Image>
+            </Pressable>
+            <Text style={styles.headerText}>{stopName}</Text>
+            <Image style={{height: 0, width: 30, resizeMode: 'contain'}} source={require('./assets/img/back.png')}></Image>
+        </View>
+    );
 }
 
 export default Gare_1;
@@ -282,5 +334,22 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderRadius: 2,
     height: 2,
+  },
+  header: {
+    backgroundColor: '#ffffff30',
+    borderRadius: 10,
+    margin: 15,
+    padding: 10,
+    paddingBottom: 15,
+    flexGrow:0,
+    display: 'flex',
+    flexDirection:'row',
+    flexWrap:'wrap',
+    justifyContent: 'space-between'
+  },
+  headerText: {
+      color: '#fff',
+      fontWeight: '100',
+      fontSize: 20,
   }
 });

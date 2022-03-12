@@ -77,9 +77,9 @@ class Trafic extends React.Component  {
 
 		return (
       <SafeAreaView  style={styles.container}>          
-          {/*<View>      
+          <View>      
             <Text style={styles.title}>Infos Trafic</Text>
-          </View>*/}
+          </View>
 
           <ScrollView
             contentContainerStyle={styles.scrollView}
@@ -96,35 +96,35 @@ class Trafic extends React.Component  {
                     line = {'A'}
                     trafics = {this.state.ratp.rers}
                     type = 'TRAM'
-                    img = {require('./assets/img/lines/RER_A.png')}
+                    img = {require('./assets/img/icons/idfm/lines_small/RER_A.png')}
                   />
                   <RATP_trafic
                     key = {'rerb'}
                     line = {'B'}
                     trafics = {this.state.ratp.rers}
                     type = 'TRAM'
-                    img = {require('./assets/img/lines/RER_B.png')}
+                    img = {require('./assets/img/icons/idfm/lines_small/RER_B.png')}
                   />
                   <SNCF_trafic
                     key = {'rerc'}
                     line = {'RER_C'}
                     trafics = {this.state.transilien}
                     type = 'RER'
-                    img = {require('./assets/img/lines/RER_C.png')}
+                    img = {require('./assets/img/icons/idfm/lines_small/RER_C.png')}
                   />
                   <SNCF_trafic
                     key = {'rerd'}
                     line = {'RER_D'}
                     trafics = {this.state.transilien}
                     type = 'RER'
-                    img = {require('./assets/img/lines/RER_D.png')}
+                    img = {require('./assets/img/icons/idfm/lines_small/RER_D.png')}
                   />
                   <SNCF_trafic
                     key = {'rere'}
                     line = {'RER_E'}
                     trafics = {this.state.transilien}
                     type = 'RER'
-                    img = {require('./assets/img/lines/RER_E.png')}
+                    img = {require('./assets/img/icons/idfm/lines_small/RER_E.png')}
                   />
               </View>
 
@@ -136,112 +136,112 @@ class Trafic extends React.Component  {
                   line = {'1'}
                   trafics = {this.state.ratp.metros}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/METRO_1.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/METRO_1.png')}
                 />
                 <RATP_trafic
                   key = {'m2'}
                   line = {'2'}
                   trafics = {this.state.ratp.metros}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/METRO_2.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/METRO_2.png')}
                 />
                 <RATP_trafic
                   key = {'m3'}
                   line = {'3'}
                   trafics = {this.state.ratp.metros}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/METRO_3.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/METRO_3.png')}
                 />
                 <RATP_trafic
                   key = {'m3b'}
                   line = {'3B'}
                   trafics = {this.state.ratp.metros}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/METRO_3B.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/METRO_3B.png')}
                 />
                 <RATP_trafic
                   key = {'m4'}
                   line = {'4'}
                   trafics = {this.state.ratp.metros}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/METRO_4.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/METRO_4.png')}
                 />
                 <RATP_trafic
                   key = {'m5'}
                   line = {'5'}
                   trafics = {this.state.ratp.metros}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/METRO_5.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/METRO_5.png')}
                 />
                 <RATP_trafic
                   key = {'m6'}
                   line = {'6'}
                   trafics = {this.state.ratp.metros}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/METRO_6.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/METRO_6.png')}
                 />
                 <RATP_trafic
                   key = {'m7'}
                   line = {'7'}
                   trafics = {this.state.ratp.metros}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/METRO_7.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/METRO_7.png')}
                 />
                 <RATP_trafic
                   key = {'m7b'}
                   line = {'7B'}
                   trafics = {this.state.ratp.metros}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/METRO_7B.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/METRO_7B.png')}
                 />
                 <RATP_trafic
                   key = {'m8'}
                   line = {'8'}
                   trafics = {this.state.ratp.metros}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/METRO_8.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/METRO_8.png')}
                 />
                 <RATP_trafic
                   key = {'m9'}
                   line = {'9'}
                   trafics = {this.state.ratp.metros}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/METRO_9.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/METRO_9.png')}
                 />
                 <RATP_trafic
                   key = {'m10'}
                   line = {'10'}
                   trafics = {this.state.ratp.metros}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/METRO_10.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/METRO_10.png')}
                 />
                 <RATP_trafic
                   key = {'m11'}
                   line = {'11'}
                   trafics = {this.state.ratp.metros}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/METRO_11.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/METRO_11.png')}
                 />
                 <RATP_trafic
                   key = {'m12'}
                   line = {'12'}
                   trafics = {this.state.ratp.metros}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/METRO_12.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/METRO_12.png')}
                 />
                 <RATP_trafic
                   key = {'m13'}
                   line = {'13'}
                   trafics = {this.state.ratp.metros}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/METRO_13.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/METRO_13.png')}
                 />
                 <RATP_trafic
                   key = {'m14'}
                   line = {'14'}
                   trafics = {this.state.ratp.metros}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/METRO_14.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/METRO_14.png')}
                 />
               </View>
     
@@ -253,77 +253,77 @@ class Trafic extends React.Component  {
                   line = {'1'}
                   trafics = {this.state.ratp.tramways}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/TRAM_1.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/TRAM_1.png')}
                 />
                 <RATP_trafic
                   key = {'t2'}
                   line = {'2'}
                   trafics = {this.state.ratp.tramways}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/TRAM_2.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/TRAM_2.png')}
                 />
                 <RATP_trafic
                   key = {'t3a'}
                   line = {'3A'}
                   trafics = {this.state.ratp.tramways}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/TRAM_3A.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/TRAM_3A.png')}
                 />
                 <RATP_trafic
                   key = {'t3b'}
                   line = {'3B'}
                   trafics = {this.state.ratp.tramways}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/TRAM_3B.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/TRAM_3B.png')}
                 />
                 <RATP_trafic
                   key = {'t4'}
                   line = {'4'}
                   trafics = {this.state.ratp.tramways}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/TRAM_4.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/TRAM_4.png')}
                 />
                 <RATP_trafic
                   key = {'t5'}
                   line = {'5'}
                   trafics = {this.state.ratp.tramways}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/TRAM_5.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/TRAM_5.png')}
                 />
                 <RATP_trafic
                   key = {'t6'}
                   line = {'6'}
                   trafics = {this.state.ratp.tramways}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/TRAM_6.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/TRAM_6.png')}
                 />
                 <RATP_trafic
                   key = {'t7'}
                   line = {'7'}
                   trafics = {this.state.ratp.tramways}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/TRAM_7.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/TRAM_7.png')}
                 />
                 <RATP_trafic
                   key = {'t8'}
                   line = {'8'}
                   trafics = {this.state.ratp.tramways}
                   type = 'METRO'
-                  img = {require('./assets/img/lines/TRAM_8.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/TRAM_8.png')}
                 />
                 <SNCF_trafic
                   key = {'t9'}
                   line = {'TRAM_T9'}
                   trafics = {this.state.transilien}
                   type = 'TRAM'
-                  img = {require('./assets/img/lines/TRAM_9.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/TRAM_9.png')}
                 />
                 <SNCF_trafic
                   key = {'t11'}
                   line = {'TRAM_T11'}
                   trafics = {this.state.transilien}
                   type = 'TRAM'
-                  img = {require('./assets/img/lines/TRAM_11.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/TRAM_11.png')}
                 />
               </View>
 
@@ -335,56 +335,57 @@ class Trafic extends React.Component  {
                   line = {'TRAIN_H'}
                   trafics = {this.state.transilien}
                   type = 'TRAIN'
-                  img = {require('./assets/img/lines/TRAIN_H.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/TRAIN_H.png')}
                 />
                 <SNCF_trafic
                   key = {'trainJ'}
                   line = {'TRAIN_J'}
                   trafics = {this.state.transilien}
                   type = 'TRAIN'
-                  img = {require('./assets/img/lines/TRAIN_J.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/TRAIN_J.png')}
                 />
                 <SNCF_trafic
                   key = {'trainK'}
                   line = {'TRAIN_K'}
                   trafics = {this.state.transilien}
                   type = 'TRAIN'
-                  img = {require('./assets/img/lines/TRAIN_K.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/TRAIN_K.png')}
                 />
                 <SNCF_trafic
                   key = {'trainL'}
                   line = {'TRAIN_L'}
                   trafics = {this.state.transilien}
                   type = 'TRAIN'
-                  img = {require('./assets/img/lines/TRAIN_L.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/TRAIN_L.png')}
                 />
                 <SNCF_trafic
                   key = {'trainN'}
                   line = {'TRAIN_N'}
                   trafics = {this.state.transilien}
                   type = 'TRAIN'
-                  img = {require('./assets/img/lines/TRAIN_N.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/TRAIN_N.png')}
                 />
                 <SNCF_trafic
                   key = {'trainP'}
                   line = {'TRAIN_P'}
                   trafics = {this.state.transilien}
                   type = 'TRAIN'
-                  img = {require('./assets/img/lines/TRAIN_P.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/TRAIN_P.png')}
                 />
                 <SNCF_trafic
                   key = {'trainR'}
                   line = {'TRAIN_R'}
                   trafics = {this.state.transilien}
                   type = 'TRAIN'
-                  img = {require('./assets/img/lines/TRAIN_R.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/TRAIN_R.png')}
                 />
                 <SNCF_trafic
                   key = {'trainU'}
                   line = {'TRAIN_U'}
                   trafics = {this.state.transilien}
                   type = 'TRAIN'
-                  img = {require('./assets/img/lines/TRAIN_U.png')}
+                  img = {require('./assets/img/icons/idfm/lines_small/TRAIN_U.png')}
+                  
                 />
               </View>
               

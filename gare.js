@@ -46,7 +46,7 @@ class Gare extends React.Component  {
 		return (
       <SafeAreaView  style={styles.container}>          
           <View>  
-            {/*<Text style={styles.title}>Rechercher une gare</Text>*/}
+          <Text style={styles.title}>Rechercher une gare</Text>
             <View style={styles.form}>
               <TextInput
                 style={styles.input}
@@ -103,7 +103,7 @@ function Stop ({stop, last}) {
   const route = '';
 
   return (
-    <Pressable onPress={() => {navigation.navigate('Gare_1', {stop: id }); }} style={styles.tiles}>
+    <Pressable onPress={() => {navigation.navigate('Gare_1', {stop: id, stopName: name }); }} style={styles.tiles}>
 
       <Text style={styles.tilesText}> {name} </Text>
       {last ? <View style={styles.space}></View> : <></>}

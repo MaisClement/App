@@ -56,16 +56,23 @@ function App ()  {
             <Stack.Screen
               name="Gare"
               component={Gare}
-              options={{title: 'Rechercher une gare'}}
+              options={{
+                headerShown: false,
+              }}
             />
             <Stack.Screen
               name="Gare_1"
               component={Gare_1}
+              options={{
+                headerShown: false,
+              }}
             />
             <Stack.Screen 
               name="Trafic"
               component={Trafic}
-              options={{title: 'Infos Trafic'}}
+              options={{
+                headerShown: false,
+              }}
             />
           </Stack.Navigator> 
         <Footer 
