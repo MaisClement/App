@@ -8,6 +8,7 @@ import Trafic from './trafic';
 import Home from './home';
 import Gare from './gare';
 import Gare_1 from './gare_1';
+import Trafic_Details from './trafic_details';
 
 const Stack = createStackNavigator();
   
@@ -74,6 +75,13 @@ function App ()  {
                 headerShown: false,
               }}
             />
+            <Stack.Screen 
+              name="Trafic_Details"
+              component={Trafic_Details}
+              options={{
+                headerShown: false,
+              }}
+            />
           </Stack.Navigator> 
         <Footer 
           route = {routeName}
@@ -105,7 +113,7 @@ function Footer({route}) {
         </Pressable>
 
         <Pressable onPress={() => {navigation.navigate('Trafic'); }}>
-          {route == 'Trafic' ?
+          {route.indexOf('Trafic') >= 0  ?
             <Image style={styles.footer_img} source={require('./assets/img/cone_filled.png')}></Image>
               :
             <Image style={styles.footer_img} source={require('./assets/img/cone.png')}></Image>
@@ -116,8 +124,21 @@ function Footer({route}) {
     );
 }
 
+function Header ({name}) {
+  const navigation = useNavigation();
+  return(
+      <View style={styles.header}>
+          <Pressable onPress={() => navigation.goBack()} >
+              <Image style={{height: 30, width: 30, resizeMode: 'contain'}} source={require('./assets/img/back.png')}></Image>
+          </Pressable>
+          <Text style={styles.headerText}>{name}</Text>
+          <Image style={{height: 0, width: 30, resizeMode: 'contain'}} source={require('./assets/img/back.png')}></Image>
+      </View>
+  );
+}
+
 function style(route){
-  if (route == 'Trafic'){
+  if (route.indexOf('Trafic') >= 0){
     return ({
       flex: 1,
       backgroundColor: '#202020',
@@ -136,7 +157,7 @@ function style(route){
 }
 
 export default App;
-export {Footer};
+export {Footer, Header};
 
 const styles = StyleSheet.create({
   title: {

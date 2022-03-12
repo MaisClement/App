@@ -1,9 +1,11 @@
 import React from 'react';
-import { RefreshControl, Pressable, StatusBar, SafeAreaView, ActivityIndicator, ScrollView, StyleSheet, Text, TextInput, View, Image  } from 'react-native';
+import { Dimensions, RefreshControl, Pressable, StatusBar, SafeAreaView, ActivityIndicator, ScrollView, StyleSheet, Text, TextInput, View, Image  } from 'react-native';
 import { useRoute, useNavigation, NavigationContainer } from '@react-navigation/native';
 import { ProgressBar, Colors } from 'react-native-paper';
 
-import Error from './error'
+import Error from './error';
+
+import Header from './Header';
 
 function Gare_1 ({ route, navigation }){
   const { stop, stopName } = route.params;
@@ -25,7 +27,10 @@ class Gare_Home extends React.Component {
             error: '',
             error_message: '',
             code: 0,
+            onload: true,
         };
+
+        this.getTrains = this.getTrains.bind(this);
         this.getTrains();
 	}
 	
@@ -33,16 +38,16 @@ class Gare_Home extends React.Component {
         let stop = this.state.stop;
         // let type = this.props.type;
         let type = 'departure';
-        let url = 'https://api.mylines.fr/sncf/departure?stop=' + stop + '&count=10';
+        //let url = 'https://api.mylines.fr/test/dep.php';
+        let url = 'https://api.mylines.fr/test/result.json';
+        //let url = 'https://api.mylines.fr/sncf/departure?stop=87393009';
+        //let url = 'https://api.mylines.fr/sncf/departure.php?stop=87393009';
             
         fetch(url, {
             method: 'get'
         })
-        .then(reponse => reponse.text())
-        .then(reponse => {
-            alert(reponse)
-            let json = JSON.parse(reponse);
-
+        .then(reponse => reponse.json())
+        .then(json => {
             if (json.error && json.error == '200') {
                 this.setState({
                     error: 'La gare indiqué ne semble pas exister.',
@@ -55,7 +60,8 @@ class Gare_Home extends React.Component {
                 }); 
             } else {
                 this.setState({
-                    train: json.trains
+                    train: json.trains,
+                    onload: false
                 });
             }
         })
@@ -69,11 +75,11 @@ class Gare_Home extends React.Component {
 
 	render(){
         return(
-            <ScrollView style={styles.container}>
+            <View style={styles.container}>
                 {this.state.error != 0 || this.state.error != '' ?
                 <>
                     <Header
-                        stopName = {this.props.stopName}
+                        name = {this.props.stopName}
                     />
                     <Error
                         error = {this.state.error}
@@ -86,123 +92,107 @@ class Gare_Home extends React.Component {
                         {this.state.train.length == 0 ?
                             <>
                                 <Header
-                                    stopName = {this.props.stopName}
+                                    name = {this.props.stopName}
                                 />
                                 <ActivityIndicator size="large" color="#ffffff" style={styles.activity}/>
                             </>
-                            
                             :
                             <View className="mobile-global">
                                 <Header
-                                    stopName = {this.props.stopName}
+                                    name = {this.props.stopName}
                                 />
-                                {this.state.train.map((train, i) => (
-                                    <Train 
-                                        key = {i} 
-                                        train = {train}
-                                        number = {i}
-                                        type = {this.props.type}
+                                <ScrollView
+                                    contentContainerStyle={styles.scrollView}
+                                    refreshControl={
+                                    <RefreshControl
+                                        onRefresh={this.getTrains}
+                                        refreshing = {this.state.onload}
                                     />
-                                ))}
+                                }>
+                                    {this.state.train.map((train, i) => (
+                                        <Train 
+                                            key = {i} 
+                                            train = {train}
+                                            number = {i}
+                                            type = {this.props.type}
+                                        />
+                                    ))}
+                                </ScrollView>
                             </View>
                         }
                     </>
                 }
-            </ScrollView>
+            </View>
         )
     }
 }
-class Train extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { width: window.innerWidth };
-
-        this.handleResize = this.handleResize.bind(this);
-    }
-    
-    handleResize(e){
-        this.setState({ width: window.innerWidth });
-    };
-    
-    componentDidMount() {
-        window.addEventListener("resize", this.handleResize);
-    }
-    
-    componentWillUnmount () {
-        window.addEventListener("resize", this.handleResize);
-    } 
-
-	render(){
-        if (typeof this.props.train === 'undefined') {
-            return (
-                <>
-                </>
-            );
-        }
-
-        let head;
-        if (this.props.type == 'departure')
-            head = this.props.train.informations.direction.name;
-        else
-            head = this.props.train.informations.origin.name;
-
-        let network = this.props.train.informations.network;
-        let code = this.props.train.informations.code;
-        let name = this.props.train.informations.trip_name;
-
-        let real_time;
-        let base_time;
-        let created_base_time;
-        
-        if (this.props.type == 'departure'){
-            if (typeof this.props.train.stop_date_time.base_departure_date_time !== 'undefined') {
-                created_base_time = createDate(this.props.train.stop_date_time.base_departure_date_time);
-                base_time = this.props.train.stop_date_time.base_departure_date_time;
-            } else {
-                created_base_time = createDate(this.props.train.stop_date_time.departure_date_time);
-                base_time = this.props.train.stop_date_time.departure_date_time;
-            }
-            real_time = this.props.train.stop_date_time.departure_date_time;
-        } else {
-            if (typeof this.props.train.stop_date_time.base_arrival_date_time !== 'undefined') {
-                created_base_time = createDate(this.props.train.stop_date_time.base_arrival_date_time);
-                base_time = this.props.train.stop_date_time.base_arrival_date_time;
-            } else {
-                created_base_time = createDate(this.props.train.stop_date_time.arrival_date_time);
-                base_time = this.props.train.stop_date_time.arrival_date_time;
-            }
-            real_time = this.props.train.stop_date_time.arrival_date_time;
-        }
-
-        let status = this.props.train.informations.status;
-        let message = this.props.train.informations.message;
-
+function Train ({train, type}) {
+    if (typeof train === 'undefined') {
         return (
-            <View>
-                <View style={styles.block}>
-                    <View>
-                        <View style={styles.block_head}>
-                            <Image style={styles.class_img} source={'https://mylines.fr/embed.php?serv=' + network}></Image>
-                            <Text style={styles.head}>{head}</Text>
-                        </View>
-                        <View>
-                            <Text style={styles.det}>{code == name ? <>{code}</> : <>{code} - {name}</>}</Text>
-                        </View>
-                    </View>
-                    <View>
-                        <View>
-                            <Text style={styles.time}>{(created_base_time.getHours() < 10) ? '0' + created_base_time.getHours() : created_base_time.getHours()}:{(created_base_time.getMinutes() < 10) ? '0' + created_base_time.getMinutes() : created_base_time.getMinutes()}</Text>
-                        </View>
-                        <View>
-                            <Info real_time={real_time} base_time={base_time} status={status} message={message}/>
-                        </View>
-                    </View>
-                </View>
-               
-                <View style={styles.space}></View>
-            </View>
+            <>
+            </>
         );
-	}
+    }
+
+    const screenWidth = Dimensions.get('window').width;
+    const screenHeight = Dimensions.get('window').height;
+
+    let head;
+    if (type == 'departure')
+        head = train.informations.direction.name;
+    else
+        head = train.informations.origin.name;
+
+    head = head.replace("Hall 1 &2", "");
+
+    let network = train.informations.network;
+    let code = train.informations.code;
+    let name = train.informations.trip_name;
+
+    let real_time;
+    let base_time;
+    let created_base_time;
+    
+    if (type == 'departure'){
+        if (typeof train.stop_date_time.base_departure_date_time !== 'undefined') {
+            created_base_time = createDate(train.stop_date_time.base_departure_date_time);
+            base_time = train.stop_date_time.base_departure_date_time;
+        } else {
+            created_base_time = createDate(train.stop_date_time.departure_date_time);
+            base_time = train.stop_date_time.departure_date_time;
+        }
+        real_time = train.stop_date_time.departure_date_time;
+    } else {
+        if (typeof train.stop_date_time.base_arrival_date_time !== 'undefined') {
+            created_base_time = createDate(train.stop_date_time.base_arrival_date_time);
+            base_time = train.stop_date_time.base_arrival_date_time;
+        } else {
+            created_base_time = createDate(train.stop_date_time.arrival_date_time);
+            base_time = train.stop_date_time.arrival_date_time;
+        }
+        real_time = train.stop_date_time.arrival_date_time;
+    }
+
+    let status = train.informations.status;
+    let message = train.informations.message;
+
+    return (
+        <View>
+            <View style={styles.block}>
+                <View style={styles.block_head}>
+                    <Image style={styles.class_img} source={{uri: 'https://mylines.fr/embed.php?serv=' + network}}></Image>
+                    <Text style={{fontSize: 20,fontWeight: '100', padding: 10, color: '#fff', width: (screenWidth - 140)}}>{head}</Text>
+                    <Text style={styles.time}>{(created_base_time.getHours() < 10) ? '0' + created_base_time.getHours() : created_base_time.getHours()}:{(created_base_time.getMinutes() < 10) ? '0' + created_base_time.getMinutes() : created_base_time.getMinutes()}</Text>
+                </View>
+            </View>
+
+            <View>
+                <Text style={styles.det}>{code == name ? <>{code}</> : <>{code} - {name}</>}</Text>
+            </View>
+
+            <View style={styles.space}></View>
+        </View>
+    );
 }
 
 class Info extends React.Component {
@@ -245,9 +235,9 @@ class Info extends React.Component {
                 if (hh == 0 && mm <= 5)
                     return ( <Text> + {mm} min </Text> );
                 else if (hh == 0)
-                    return ( <Text className="late"> + {mm} min </span> );
+                    return ( <Text className="late"> + {mm} min </Text> );
                 else 
-                    return ( <Text className="late"> + {hh}h{mm} </span> );
+                    return ( <Text className="late"> + {hh}h{mm} </Text> );
             } else {
                 if (hh == 0)
                     return ( <Text className="late"> retard : {mm} min </Text> );
@@ -263,19 +253,6 @@ class Info extends React.Component {
 function createDate(date){
     let el = new Date(date.substring(0, 4), date.substring(4, 6), date.substring(6, 8), date.substring(9, 11), date.substring(11, 13), 0, 0); 
     return el;
-}
-
-function Header ({stopName}) {
-    const navigation = useNavigation();
-    return(
-        <View style={styles.header}>
-            <Pressable onPress={() => navigation.goBack()} >
-                <Image style={{height: 30, width: 30, resizeMode: 'contain'}} source={require('./assets/img/back.png')}></Image>
-            </Pressable>
-            <Text style={styles.headerText}>{stopName}</Text>
-            <Image style={{height: 0, width: 30, resizeMode: 'contain'}} source={require('./assets/img/back.png')}></Image>
-        </View>
-    );
 }
 
 export default Gare_1;
@@ -300,27 +277,28 @@ const styles = StyleSheet.create({
     flexWrap:'wrap',
     alignItems: 'baseline',
     justifyContent: 'space-between',
-    padding: 10,
   },
   block_head: {
     flexDirection:'row',
     flexWrap:'wrap',
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
   class_img: {
-    width: 70, 
-    height: 23 ,
+    width: 50, 
+    height: 25,
     resizeMode: 'contain'
   },
   head: {
     fontSize: 20,
     fontWeight: '100',
-    padding: '10',
+    padding: 10,
     color: '#fff',
   },
   time: {
     fontSize: 25,
     fontWeight: '700',
-    padding: '10',
+    padding: 10,
     color: '#fff',
   },
   det: {

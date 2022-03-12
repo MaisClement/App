@@ -1,1 +1,0 @@
-{"ast":null,"code":"module.exports = {\n  routeName: ''\n};","map":{"version":3,"sources":["/home/code/app/global.js"],"names":["module","exports","routeName"],"mappings":"AAAAA,MAAM,CAACC,OAAP,GAAiB;AACfC,EAAAA,SAAS,EAAE;AADI,CAAjB","sourcesContent":["module.exports = {\n  routeName: '',\n};"]},"metadata":{},"sourceType":"script"}
