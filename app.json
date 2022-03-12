@@ -7,7 +7,7 @@
       "**/*"
     ],
     "android": {
-      "package": "com.lowatrafic"
+      "package": "com.lowa.trafic"
     }
   },
   "name": "app"

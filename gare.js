@@ -46,7 +46,7 @@ class Gare extends React.Component  {
 		return (
       <SafeAreaView  style={styles.container}>          
           <View>  
-            <Text style={styles.title}>Rechercher une gare</Text>
+            {/*<Text style={styles.title}>Rechercher une gare</Text>*/}
             <View style={styles.form}>
               <TextInput
                 style={styles.input}
@@ -118,7 +118,7 @@ export default Gare;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#202020',
+    backgroundColor: '#2b1922',
   },
   title: {
     fontSize: 30,

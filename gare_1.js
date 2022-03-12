@@ -51,13 +51,13 @@ class Gare_Home extends React.Component {
 
 	render(){
         return(
-            <View>
+            <ScrollView style={styles.container}>
                 {this.state.error != 0 || this.state.error != '' ?
                     <Text>Something wrong - {this.state.error} - {this.state.error_message}</Text>
                     :
                     <>
                         {this.state.train.length == 0 ?
-                            <ActivityIndicator size="small" color="#0000ff" />
+                            <ActivityIndicator size="large" color="#ffffff" style={styles.activity}/>
                             :
                             <View className="mobile-global">
                                 {this.state.train.map((train, i) => (
@@ -72,7 +72,7 @@ class Gare_Home extends React.Component {
                         }
                     </>
                 }
-            </View>
+            </ScrollView>
         )
     }
 }
@@ -142,30 +142,26 @@ class Train extends React.Component {
         let message = this.props.train.informations.message;
 
         return (
-            <>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td className="dest">
-                                <img src={'https://mylines.fr/embed.php?serv=' + network} className='img' alt="Logo service"/>
-                                {head}
-                            </td>
-                            <td className="time" rowSpan={2}>
-                                <span>{(created_base_time.getHours() < 10) ? '0' + created_base_time.getHours() : created_base_time.getHours()}:{(created_base_time.getMinutes() < 10) ? '0' + created_base_time.getMinutes() : created_base_time.getMinutes()}</span>
-                                    <br />
-                                <Info real_time={real_time} base_time={base_time} status={status} message={message}/>
-                            </td>
-                            
-                        </tr>
-                        <tr className='train'>
-                            <td className="trafic"> {code == name ? <>{code}</> : <>{code} - {name}</>} </td>
-                        </tr>
-                    </tbody>
-                </table>
-				
-                <div className='hr'></div>
-			</>
-            
+            <View>
+                <View style={styles.block}>
+                    <View>
+                        <View style={styles.block_head}>
+                            <Image style={styles.class_img} source={'https://mylines.fr/embed.php?serv=' + network}></Image>
+                            <Text style={styles.head}>{head}</Text>
+                        </View>
+                        <View>
+                            <Text style={styles.det}>{code == name ? <>{code}</> : <>{code} - {name}</>}</Text>
+                        </View>
+                    </View>
+                    <View>
+                        <Text style={styles.time}>{(created_base_time.getHours() < 10) ? '0' + created_base_time.getHours() : created_base_time.getHours()}:{(created_base_time.getMinutes() < 10) ? '0' + created_base_time.getMinutes() : created_base_time.getMinutes()}</Text>
+                            <br />
+                        <Info real_time={real_time} base_time={base_time} status={status} message={message}/>
+                    </View>
+                </View>
+               
+                <View style={styles.space}></View>
+            </View>
         );
 	}
 }
@@ -235,7 +231,10 @@ export default Gare_1;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#202020',
+    backgroundColor: '#2b1922',
+  },
+  activity: {
+    marginTop: 50,
   },
   title: {
     fontSize: 30,
@@ -244,38 +243,41 @@ const styles = StyleSheet.create({
     color: '#fff',
     margin: 23,
   },
-  form: {
-    borderColor: '#0064aab7',
-    borderWidth: 2,
-    borderRadius: 10,
-    marginTop: 15,
-    marginLeft: 15,
-    marginRight: 15,
-    marginBottom: 15,
-    padding: 5,
-    color: '#fff',
+  block: {
+    flexDirection:'row',
+    flexWrap:'wrap',
+    alignItems: 'baseline',
+    justifyContent: 'space-between',
+    padding: 10,
+  },
+  block_head: {
+    flexDirection:'row',
+    flexWrap:'wrap',
+  },
+  class_img: {
+    width: 70, 
+    height: 23 ,
+    resizeMode: 'contain'
+  },
+  head: {
     fontSize: 20,
-  },
-  input: {
+    fontWeight: '100',
+    padding: '10',
     color: '#fff',
   },
-  loadSpace: {
-    height: 3,
-  },
-  tiles: {
+  time: {
+    fontSize: 25,
+    fontWeight: '700',
+    padding: '10',
     color: '#fff',
-    marginTop: 5,
-    marginLeft: 15,
-    marginRight: 15,
-    marginBottom: 5,
   },
-  tilesText: {
-    color: '#fff',
-    fontSize: 20,
+  det: {
+    color: '#a4a4a4',
+    fontSize: 15,
+    paddingLeft: 10,
   },
   space: {
     backgroundColor: '#868686',
-    marginTop: 15,
     marginLeft: 10,
     marginRight: 10,
     borderRadius: 2,

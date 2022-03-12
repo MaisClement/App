@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, Icon, View, Image  } from 'react-native';
-  
+
 class Trafic extends React.Component  {
   constructor(props) {
 		super(props);
@@ -77,9 +77,9 @@ class Trafic extends React.Component  {
 
 		return (
       <SafeAreaView  style={styles.container}>          
-          <View>      
+          {/*<View>      
             <Text style={styles.title}>Infos Trafic</Text>
-          </View>
+          </View>*/}
 
           <ScrollView
             contentContainerStyle={styles.scrollView}

@@ -19,7 +19,7 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#202020',
+    backgroundColor: '#191c2b',
   },
   title: {
     fontSize: 35,
