@@ -12,7 +12,7 @@
     "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/stack": "^6.1.1",
-    "expo": "^43.0.6",
+    "expo": "^44.0.6",
     "expo-splash-screen": "~0.14.1",
     "expo-status-bar": "~1.2.0",
     "fast-xml-parser": "^4.0.6",
