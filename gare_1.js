@@ -47,7 +47,7 @@ class Gare_Home extends React.Component {
         })
         .then(reponse => reponse.json())
         .then(json => {
-            alert(json)
+            console.log(json)
             if (json.error && json.error == '200') {
                 this.setState({
                     error: 'La gare indiqué ne semble pas exister.',
