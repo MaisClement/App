@@ -4,7 +4,6 @@ import { useRoute, useNavigation, NavigationContainer } from '@react-navigation/
 import { ProgressBar, Colors } from 'react-native-paper';
 
 import Error from './error';
-
 import Header from './Header';
 
 function Gare_1 ({ route, navigation }){
@@ -38,16 +37,17 @@ class Gare_Home extends React.Component {
         let stop = this.state.stop;
         // let type = this.props.type;
         let type = 'departure';
-        //let url = 'https://api.mylines.fr/test/dep.php';
-        let url = 'https://api.mylines.fr/test/result.json';
-        //let url = 'https://api.mylines.fr/sncf/departure?stop=87393009';
-        //let url = 'https://api.mylines.fr/sncf/departure.php?stop=87393009';
+        // let url = 'https://api.mylines.fr/test/dep.php';
+        // let url = 'https://api.mylines.fr/test/result.json';
+        // let url = 'https://api.mylines.fr/sncf/departure?stop=87481002';
+        let url = 'https://api.mylines.fr/sncf/departure.php?stop=87481002';
             
         fetch(url, {
             method: 'get'
         })
         .then(reponse => reponse.json())
         .then(json => {
+            alert(json)
             if (json.error && json.error == '200') {
                 this.setState({
                     error: 'La gare indiqué ne semble pas exister.',
@@ -305,6 +305,7 @@ const styles = StyleSheet.create({
     color: '#a4a4a4',
     fontSize: 15,
     paddingLeft: 10,
+    marginBottom: 10,
   },
   space: {
     backgroundColor: '#868686',

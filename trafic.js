@@ -456,11 +456,11 @@ function SNCF_trafic ({ line, trafics, name, type, img })  {
       }
     }
 
-    if (trafic.currentTrafficDisruptionsCount != 0) {
+    if (trafic.currentTrafficDisruptionsCount > 0) {
       color = 1; 
       typeImg = error;
 
-    } else if (trafic.currentWorksDisruptionsCount != 0) {
+    } else if (trafic.currentWorksDisruptionsCount > 0) {
       color = 2;
       typeImg = work;
 
@@ -468,9 +468,13 @@ function SNCF_trafic ({ line, trafics, name, type, img })  {
       color = 0;
       typeImg = futureWork;
 
-    } else {
+    } else if (trafic.currentTrafficDisruptionsCount == 0 && trafic.currentWorksDisruptionsCount == 0 ) {
       color = 0;
       typeImg = valid;
+
+    } else {
+      color = 0;
+      typeImg = interogation;
     }
   } else {
     color = 0;

@@ -159,7 +159,7 @@ class SNCF_Trafic_Detail extends React.Component {
                 ))}
                 {trafic.hasWorksDisruptions == true ?
                   <View style={styles.future}>
-                    <Text style={styles.title} >A venir</Text>
+                    <Text style={styles.title} >À venir</Text>
                     {trafic.futureDisruptions.map((disruptions, i) => (
                     <View key={'det' + i}>
                       <Text style={styles.sub_title} >{disruptions.title}</Text>
@@ -234,6 +234,8 @@ const styles = StyleSheet.create({
   },
   future: {
     marginTop: 20,
+    marginBottom: 85,
+    paddingTop: 20,
     paddingLeft: 20,
     paddingRight: 20,
     borderRadius: 20,
