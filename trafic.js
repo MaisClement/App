@@ -437,87 +437,107 @@ class Trafic extends React.Component  {
   }
 }
 
-class SNCF_trafic extends React.Component  {
-  constructor(props) {
-		super(props);
-		this.state = {
-      details: false,
-    };
-	}
+function SNCF_trafic ({ line, trafics, name, type, img })  {
+  let color;
+  let trafic = [];
+  let typeImg;
 
-  showDetails(){
-    this.setState({
-      details : (!this.state.details)
-    })
-  }
+  const error = require('./assets/img/error_small.png');
+  const valid = require('./assets/img/valid_small.png');
+  const work = require('./assets/img/work_small.png');
+  const futureWork = require('./assets/img/futur_work_small.png');
+  const interogation = require('./assets/img/interogation_small.png');
 
-  render(){
-    var i = 1;
-    const line = this.props.line;
-    const trafics = this.props.trafics;
-    const type = this.props.type;
-    const img = this.props.img;
-
-    let color;
-
-    if (this.state.details == true){
-      return (
-        <Overlay isVisible={true}>
-          <Text>Hello!</Text>
-          <Text>
-            Welcome to React Native Elements
-          </Text>
-        </Overlay>
-      );
-    }
-
-    if (typeof trafics === "undefined"){
-      color = 0;
-    } else {
-      for(var i = 0; i < trafics.length; i++){
-        if (trafics[i].transportLine == line && trafics[i].hasTrafficDisruptions == true){
-          color = 1;
-        }
-        if (trafics[i].transportLine == line && trafics[i].hasWorksDisruptions == true){
-          color = 2;
-        }
+  if (typeof trafics !== "undefined"){
+    for(var i = 0; i < trafics.length; i++){
+      if (trafics[i].transportLine == line){
+        trafic = trafics[i];
+        break;
       }
     }
 
-    return (
-      <View style={styles.trafic_block} onPress={() => {this.showDetails()}}>
-        <View style={style(color)}>
-          <Image style={styles.trafic_img} source={img}></Image>
-        </View>
-      </View>
-    );
-    
+    if (trafic.currentTrafficDisruptionsCount != 0) {
+      color = 1; 
+      typeImg = error;
+
+    } else if (trafic.currentWorksDisruptionsCount != 0) {
+      color = 2;
+      typeImg = work;
+
+    } else if (trafic.currentWorksDisruptionsCount == 0 && trafic.hasWorksDisruptions == true) {
+      color = 0;
+      typeImg = futureWork;
+
+    } else {
+      color = 0;
+      typeImg = valid;
+    }
+  } else {
+    color = 0;
+    typeImg = interogation
   }
-}
-function RATP_trafic ({ line, trafics, name, type, img })  {
-	var i = 1;
-  let color;
 
   const navigation = useNavigation();
 
-  if (typeof trafics === "undefined"){
-    color = 0;
-  } else {
-    for(var i = 0; i < trafics.length; i++){
-      if (trafics[i].line == line && trafics[i].slug == 'critical'){
-        color = 1;
-      }
-      if (trafics[i].line == line && trafics[i].slug == 'normal_trav'){
-        color = 2;
-      }
-    }
-  }
-
   return (
-    <Pressable onPress={() => {navigation.navigate('Trafic_Details', {line: line, trafic: trafics, name: name, type: type, img: img }) }}>
+    <Pressable onPress={() => {navigation.navigate('SNCF_Trafic_Details', {line: line, trafic: trafic, name: name, type: type, img: img }) }}>
       <View style={styles.trafic_block}>
         <View style={style(color)}>
-          <Image style={styles.trafic_img} source={img}></Image>
+          <Image style={styles.img} source={img}></Image>
+          <Image style={styles.trafic_img} source={typeImg}></Image>
+        </View>
+      </View>
+    </Pressable>
+  );
+}
+function RATP_trafic ({ line, trafics, name, type, img })  {
+  let color;
+  let trafic = [];
+  let typeImg;
+
+  const error = require('./assets/img/error_small.png');
+  const valid = require('./assets/img/valid_small.png');
+  const work = require('./assets/img/work_small.png');
+  const interogation = require('./assets/img/interogation_small.png');
+
+  if (typeof trafics !== "undefined"){
+    for(var i = 0; i < trafics.length; i++){
+      if (trafics[i].line == line){
+        trafic = trafics[i];
+        break;
+      }
+    }
+
+    if (trafic.slug == 'critical') {
+      color = 1; 
+      typeImg = error;
+
+    } else if (trafic.slug == 'normal_trav') {
+      color = 2;
+      typeImg = work;
+
+    } else if (trafic.slug == 'normal') {
+      color = 0;
+      typeImg = valid
+
+    } else {
+      color = 0;
+      typeImg = interogation
+    }
+  } else {
+    color = 0;
+    typeImg = interogation
+  }
+
+  const navigation = useNavigation();
+
+
+  return (
+    <Pressable onPress={() => {navigation.navigate('RATP_Trafic_Details', {line: line, trafic: trafic, name: name, type: type, img: img }) }}>
+      <View style={styles.trafic_block}>
+        <View style={style(color)}>
+          <Image style={styles.img} source={img}></Image>
+          <Image style={styles.trafic_img} source={typeImg}></Image>
         </View>
       </View>
     </Pressable>
@@ -529,21 +549,24 @@ function style(slug){
     return ({
       borderWidth: 3,
       borderStyle: 'solid',
-      borderColor: '#ff6800',
+      borderColor: '#eb2132',
       borderRadius: 10
     });
   } else if (slug == 2){
     return ({
       borderWidth: 3,
       borderStyle: 'solid',
-      borderBottomColor: '#ff3c00',
+      borderTopColor: '#f58f53',
+      borderLeftColor: '#f58f53',
+      borderRightColor: '#f58f53',
+      borderBottomColor: '#f58f53',
       borderRadius: 10
     });
   } else {
     return ({
       borderWidth: 3,
       borderStyle: 'solid',
-      borderColor: '#303138',
+      borderColor: '#ffffff00',
       borderRadius: 10
     });
   }
@@ -579,13 +602,20 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 15,
     marginLeft: 15,
-    height: 40,
+    height: 45,
     width: 45,
   },
-  trafic_img: {
+  img: {
     height: 30,
     width: 30,
     margin: 5,
+  },
+  trafic_img: {
+    width: 15,
+    height: 15, 
+    resizeMode: 'contain',
+    marginTop: -15,
+    marginLeft: 25,
   },
   space: {
     backgroundColor: '#868686',

@@ -1,4 +1,4 @@
-node_modules
-.expo
-android
-'~
+/node_modules
+/.expo
+/android
+/'~

@@ -8,7 +8,7 @@ import Trafic from './trafic';
 import Home from './home';
 import Gare from './gare';
 import Gare_1 from './gare_1';
-import Trafic_Details from './trafic_details';
+import {SNCF_Trafic_Details, RATP_Trafic_Details} from './trafic_details';
 
 const Stack = createStackNavigator();
   
@@ -76,8 +76,15 @@ function App ()  {
               }}
             />
             <Stack.Screen 
-              name="Trafic_Details"
-              component={Trafic_Details}
+              name="RATP_Trafic_Details"
+              component={RATP_Trafic_Details}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen 
+              name="SNCF_Trafic_Details"
+              component={SNCF_Trafic_Details}
               options={{
                 headerShown: false,
               }}

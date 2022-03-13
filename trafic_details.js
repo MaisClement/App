@@ -2,15 +2,30 @@ import React from 'react';
 import { Dimensions, RefreshControl, Pressable, StatusBar, SafeAreaView, ActivityIndicator, ScrollView, StyleSheet, Text, TextInput, View, Image  } from 'react-native';
 import { useRoute, useNavigation, NavigationContainer } from '@react-navigation/native';
 import { ProgressBar, Colors } from 'react-native-paper';
+import {decode} from 'html-entities';
+
 
 import Error from './error';
 
 import Header from './Header';
 
-function Trafic_Details ({ route, navigation }){
+function SNCF_Trafic_Details ({ route, navigation }){
   const { line, trafic, name, type, img } = route.params;
 
-  return (  <Trafic_Detail
+  return (  <SNCF_Trafic_Detail
+                line = {line}
+                trafic = {trafic}
+                name = {name}
+                type = {type}
+                img = {img}
+            />
+          );
+}
+
+function RATP_Trafic_Details ({ route, navigation }){
+  const { line, trafic, name, type, img } = route.params;
+
+  return (  <RATP_Trafic_Detail
                 line = {line}
                 trafic = {trafic}
                 name = {name}
@@ -20,44 +35,166 @@ function Trafic_Details ({ route, navigation }){
           );
 }
   
-class Trafic_Detail extends React.Component {
+class RATP_Trafic_Detail extends React.Component {
 	render(){
 		var i = 1;
 		const line = this.props.line;
-		const trafics = this.props.trafics;
+		const trafic = this.props.trafic;
 		const type = this.props.type;
     const img = this.props.img;
+    let typeImg;
+
+    const error = require('./assets/img/error_small.png');
+    const valid = require('./assets/img/valid_small.png');
+    const work = require('./assets/img/work_small.png');
+    const interogation = require('./assets/img/interogation_small.png');
 
     let color;
 
-    if (typeof trafics === "undefined"){
-      color = 0;
-    } else {
-      for(var i = 0; i < trafics.length; i++){
-        if (trafics[i].line == line && trafics[i].slug == 'critical'){
-          color = 1;
-        }
-        if (trafics[i].line == line && trafics[i].slug == 'normal_trav'){
-          color = 2;
-        }
+    if (typeof trafic !== "undefined"){
+      if (trafic.slug == 'critical') {
+        color = 1; 
+        typeImg = error;
+
+      } else if (trafic.slug == 'normal_trav') {
+        color = 2;
+        typeImg = work;
+
+      } else if (trafic.slug == 'normal') {
+        color = 0;
+        typeImg = valid
+        
+      } else {
+        color = 0;
+        typeImg = interogation
       }
+    } else {
+      color = 0;
+      typeImg = interogation
     }
 
 		return (
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         <Header name = {this.props.name} />
-        <View style={styles.trafic_block}>
-          <View>
-            <Image style={styles.trafic_img} source={img}></Image>
+        <ScrollView style={styles.block}>
+          <View style={styles.head}>
+            <View>
+              <Image style={styles.img} source={img}></Image>
+              <Image style={styles.trafic_img} source={typeImg}></Image>
+            </View>
+            <Text style={styles.title} >{trafic.title}</Text>
+            <Text style={styles.message} >{trafic.message}</Text>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
 		);
 	}
 }
 
+class SNCF_Trafic_Detail extends React.Component {
+	render(){
+		var i = 1;
+		const line = this.props.line;
+		const trafic = this.props.trafic;
+		const type = this.props.type;
+    const img = this.props.img;
+    let typeImg;
+    let title = '';
 
-export default Trafic_Details;
+    let search = ['<p>', '<br><br>', '<br>', '\n\n\n'];
+    let replace = ['\n', '\n\n',     '\n',   '\n\n'];
+
+    const error = require('./assets/img/error_small.png');
+    const valid = require('./assets/img/valid_small.png');
+    const work = require('./assets/img/work_small.png');
+    const futureWork = require('./assets/img/futur_work_small.png');
+    const interogation = require('./assets/img/interogation_small.png');
+
+    let color;
+
+    if (typeof trafic !== "undefined"){
+      if (trafic.currentTrafficDisruptionsCount != 0) {
+        color = 1; 
+        typeImg = error;
+        title = 'Trafic Pertubé';
+  
+      } else if (trafic.currentWorksDisruptionsCount != 0) {
+        color = 2;
+        typeImg = work;
+        title = 'Travaux';
+  
+      } else if (trafic.currentWorksDisruptionsCount == 0 && trafic.hasWorksDisruptions == true) {
+        color = 0;
+        typeImg = futureWork;
+        title = 'Travaux à venir';
+  
+      } else {
+        color = 0;
+        typeImg = valid;
+        title = 'Trafic normal';
+      }
+    } else {
+      color = 0;
+      typeImg = interogation
+    }
+
+		return (
+      <View style={styles.container}>
+        <Header name = {this.props.name} />
+        <View style={styles.scroll}>
+          <ScrollView>
+            <View style={styles.head}>
+              <View style={styles.block}>
+                <Image style={styles.img} source={img}></Image>
+                <Image style={styles.trafic_img} source={typeImg}></Image>
+              </View>
+              <Text style={styles.title} >{title}</Text>
+              <View>
+                {trafic.currentDisruptions.map((disruptions, i) => (
+                  <View key={'det' + i} style={styles.block}>
+                    <Text style={styles.sub_title} >{disruptions.title}</Text>
+                    <Text style={styles.message} >{ decode(replaceAllArray(disruptions.detail, search, replace).replace( /(<([^>]+)>)/ig, '')) }</Text>
+                    {trafic.currentDisruptions.length - 1 == i ? <></> : <View style={styles.space}></View>}
+                  </View>
+                ))}
+                {trafic.hasWorksDisruptions == true ?
+                  <View style={styles.future}>
+                    <Text style={styles.title} >A venir</Text>
+                    {trafic.futureDisruptions.map((disruptions, i) => (
+                    <View key={'det' + i}>
+                      <Text style={styles.sub_title} >{disruptions.title}</Text>
+                      <Text style={styles.message} >{ decode(replaceAllArray(disruptions.detail, search, replace).replace( /(<([^>]+)>)/ig, '')) }</Text>
+                      {trafic.futureDisruptions.length - 1 == i ? <></> : <View style={styles.space}></View>}
+                    </View>
+                    ))}
+                  </View>
+                  :
+                  <></>
+                }
+                
+              </View>
+            </View>
+          </ScrollView>
+        </View>
+      </View>
+		);
+	}
+}
+
+function escapeRegExp(str){
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+function replaceAll(str, term, replace) {
+  return str.replace(new RegExp(escapeRegExp(term), 'g'), replace);
+}
+function replaceAllArray(str, term, replace) {
+  for (var i = 0; i < term.length; i++){
+    str = replaceAll(str, term[i], replace[i])
+  }
+  return str;
+}
+
+export {SNCF_Trafic_Details, RATP_Trafic_Details};
 
 const styles = StyleSheet.create({
   container: {
@@ -72,64 +209,56 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontWeight: 'bold',
     color: '#fff',
-    margin: 23,
+    marginLeft: 10,
+  },
+  sub_title: {
+    fontSize: 20,
+    textAlign: 'left',
+    fontWeight: 'bold',
+    color: '#fff',
+    marginTop: 20,
+    marginLeft: 10,
+  },
+  message: {
+    textAlign: 'left',
+    color: '#fff',
+    marginTop: 10,
+    marginLeft: 10,
+  },
+  scroll: {
+    borderRadius: 20,
   },
   block: {
-    flexDirection:'row',
-    flexWrap:'wrap',
-    alignItems: 'baseline',
-    justifyContent: 'space-between',
+    marginLeft: 20,
+    marginRight: 20,
   },
-  block_head: {
-    flexDirection:'row',
-    flexWrap:'wrap',
-    alignItems: 'center',
-    justifyContent: 'space-between'
-  },
-  class_img: {
-    width: 50, 
-    height: 25,
-    resizeMode: 'contain'
+  future: {
+    marginTop: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+    borderRadius: 20,
+    backgroundColor: '#ffffff14',
   },
   head: {
-    fontSize: 20,
-    fontWeight: '100',
-    padding: 10,
-    color: '#fff',
+    flexDirection:'row',
+    flexWrap:'wrap',
   },
-  time: {
-    fontSize: 25,
-    fontWeight: '700',
-    padding: 10,
-    color: '#fff',
+  img: {
+    width: 40,
+    height: 40, 
+    resizeMode: 'contain'
   },
-  det: {
-    color: '#a4a4a4',
-    fontSize: 15,
-    paddingLeft: 10,
+  trafic_img: {
+    width: 20,
+    height: 20, 
+    resizeMode: 'contain',
+    marginTop: -15,
+    marginLeft: 30,
   },
   space: {
     backgroundColor: '#868686',
-    marginLeft: 10,
-    marginRight: 10,
+    marginTop: 15,
     borderRadius: 2,
     height: 2,
-  },
-  header: {
-    backgroundColor: '#ffffff30',
-    borderRadius: 10,
-    margin: 15,
-    padding: 10,
-    paddingBottom: 15,
-    flexGrow:0,
-    display: 'flex',
-    flexDirection:'row',
-    flexWrap:'wrap',
-    justifyContent: 'space-between'
-  },
-  headerText: {
-      color: '#fff',
-      fontWeight: '100',
-      fontSize: 20,
   }
 });
